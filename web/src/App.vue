@@ -1,35 +1,24 @@
 <template>
-  <div>
-    Hello: {{ name }}
-  </div>
+  <NavBar />
   <router-view />
 </template>
 
 <script>
-import { ref } from 'vue';
-import $ from 'jquery';
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap";
+import NavBar from './components/NavBar.vue';
 
 export default {
   name: "App",
-  setup() {
-    let name = ref("");
-
-    $.ajax({
-      url: "http://127.0.0.1:3000/pk/getInfo",
-      type: "GET",
-      success(resp) {
-        console.log(resp);
-        name.value = resp.name;
-      }
-    })
-
-    return {
-      name,
-    };
+  components: {
+    NavBar,
   }
 }
 </script>
 
 <style>
-
+body {
+  background-image: url("../src/assets/background.png");
+  background-size: cover;
+}
 </style>
