@@ -8,9 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/pk/")
 public class BotInfoController {
-    @RequestMapping("/getInfo")
+    @RequestMapping("/pk/getInfo")
     public Map<String, String> getInfo() {
         Map<String, String> bot = new HashMap<>();
         bot.put("name", "123");
