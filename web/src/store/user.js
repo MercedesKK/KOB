@@ -41,6 +41,9 @@ export default {
         },
         success(resp) {
           if (resp.error_message === "success") {
+            // token存到浏览器中
+            localStorage.setItem("jwt_token", resp.token);
+
             context.commit("updateToken", resp.token);
             data.success(resp);
           } else {
@@ -78,6 +81,7 @@ export default {
     },
 
     logout(context) {
+      localStorage.removeItem("jwt_token");
       context.commit("logout");
     },
   },

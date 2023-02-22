@@ -1,3 +1,6 @@
+///@ author 张靖凯
+// 在SpringBoot中解决跨域问题
+
 package com.kob.backend.config;
 
 import org.springframework.context.annotation.Configuration;

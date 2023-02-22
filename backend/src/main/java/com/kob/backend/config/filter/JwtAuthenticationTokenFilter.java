@@ -1,3 +1,7 @@
+///@author 张靖凯
+// jwt的包，和数据库有对接
+// Authorization的Bearer的授权，和公开与否有关
+// 用来验证jwt token，如果验证成功，则将User信息注入上下文中
 package com.kob.backend.config.filter;
 
 import com.kob.backend.mapper.UserMapper;

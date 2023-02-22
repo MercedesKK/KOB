@@ -1,3 +1,6 @@
+///@author 张靖凯
+//为jwt工具类，用来创建、解析jwt token
+
 package com.kob.backend.utils;
 
 import io.jsonwebtoken.Claims;

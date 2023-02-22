@@ -1,3 +1,7 @@
+///@ author 张靖凯
+// 密码加密的包和授权公开的链接在这里添加
+// 放行登录、注册等接口
+
 package com.kob.backend.config;
 
 import com.kob.backend.config.filter.JwtAuthenticationTokenFilter;

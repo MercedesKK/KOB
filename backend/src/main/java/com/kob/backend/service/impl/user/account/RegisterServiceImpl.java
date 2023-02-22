@@ -44,6 +44,7 @@ public class RegisterServiceImpl implements RegisterService {
             map.put("error_message", "密码不能为空");
             return map;
         }
+
         if (password.length() > 100 || confirmedPassword.length() > 100) {
             map.put("error_message", "密码长度不能大于100");
             return map;
@@ -68,6 +69,7 @@ public class RegisterServiceImpl implements RegisterService {
         userMapper.insert(user);
 
         map.put("error_message", "success");
+
         return map;
     }
 }
