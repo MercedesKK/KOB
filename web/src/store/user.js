@@ -75,7 +75,8 @@ export default {
           }
         },
         error(resp) {
-          data.error(resp);
+          //   data.error(resp);
+          console.log("过期了", resp);
         },
       });
     },
