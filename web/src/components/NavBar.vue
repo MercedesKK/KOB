@@ -17,11 +17,13 @@
                             :to="{ name: 'ranklist_index' }">排行榜</router-link>
                     </li>
                 </ul>
-                <ul class="navbar-nav">
+                <ul class="navbar-nav" v-if="$store.state.user.is_login">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            MercedesKK
+                            {{ $store.state.user.username }}
+
+                            <!-- 这样的$store是不用引入useStore -->
                         </a>
 
                         <ul class="dropdown-menu">
@@ -30,8 +32,20 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">退出</a></li>
+                            <li><a class="dropdown-item" href="#" @click="logout">退出</a></li>
                         </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav" v-else>
+                    <li class="nav-item">
+                        <router-link class="nav-link " role="button" :to="{ name: 'user_account_login' }">
+                            登录
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link " role="button" :to="{ name: 'user_account_register' }">
+                            注册
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -42,13 +56,24 @@
 <script>
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
     setup() {
+        const store = useStore();
         const route = useRoute();
+        // 为了计算当前页面的router的name
         let route_name = computed(() => route.name);
+
+
+        // 不用router的事件直接在setup里写事件函数，然后使用store即可
+        const logout = () => {
+            store.dispatch("logout");
+        }
+
         return {
             route_name,
+            logout,
         }
     }
 }
