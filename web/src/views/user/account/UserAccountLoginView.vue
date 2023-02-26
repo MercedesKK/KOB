@@ -40,6 +40,20 @@ export default {
         let password = ref("");
         let error_message = ref("");
 
+        // const jwt_token = localStorage.getItem("jwt_token");
+        // if (jwt_token) {
+
+        //     store.commit("updateToken", jwt_token);
+        //     store.dispatch("getInfo", {
+        //         success() {
+        //             router.push({ name: "home" });
+        //         },
+        //         error() {
+
+        //         }
+        //     })
+        // }
+
         // 前端按钮绑定的函数
         const login = () => {
             error_message.value = "";

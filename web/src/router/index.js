@@ -103,7 +103,10 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requsetAuth && !store.state.user.is_login) {
     if (flag === 1) {
-      next();
+      // next();
+      setTimeout(() => {
+        next();
+      }, 1);
     } else {
       next({ name: "user_account_login" });
     }

@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import ModuleUser from "./user";
+import ModulePK from "./pk";
 
 // 相当于前后端的中间人
 export default createStore({
@@ -12,5 +13,6 @@ export default createStore({
   actions: {},
   modules: {
     user: ModuleUser,
+    pk: ModulePK,
   },
 });
