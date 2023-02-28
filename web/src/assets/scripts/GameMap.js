@@ -1,224 +1,160 @@
 import { GameObject } from "./GameObject";
 import { Wall } from "./Wall";
-import { Snake } from './Snake';
+import { Snake } from "./Snake";
 
 export class GameMap extends GameObject {
-    constructor(ctx, parent) {
-        super();
+  constructor(ctx, parent, store) {
+    super();
 
-        this.ctx = ctx;
-        this.parent = parent;
-        this.L = 0;
-        this.rows = 13;
-        this.cols = 14;
+    this.ctx = ctx;
+    this.parent = parent;
+    this.store = store;
 
-        this.inner_walls_count = 20;
-        this.walls = [];
+    this.L = 0;
+    this.rows = 13;
+    this.cols = 14;
 
-        this.snakes = [
-            new Snake({
-                id: 0,
-                color: "#4876EC",
-                r: this.rows - 2,
-                c: 1,
-            }, this),
-            new Snake({
-                id: 1,
-                color: "#F94848",
-                r: 1,
-                c: this.cols - 2,
-            }, this),
-        ]
+    this.inner_walls_count = 20;
+    this.walls = [];
+
+    this.snakes = [
+      new Snake(
+        {
+          id: 0,
+          color: "#4876EC",
+          r: this.rows - 2,
+          c: 1,
+        },
+        this
+      ),
+      new Snake(
+        {
+          id: 1,
+          color: "#F94848",
+          r: 1,
+          c: this.cols - 2,
+        },
+        this
+      ),
+    ];
+  }
+
+  creatWalls() {
+    const g = this.store.state.pk.gamemap; // 地图由云端产生
+
+    // 渲染
+    for (let r = 0; r < this.rows; r++) {
+      for (let c = 0; c < this.cols; c++) {
+        if (g[r][c]) this.walls.push(new Wall(r, c, this));
+      }
     }
+  }
 
-    // 判断连通性
-    checkConnectivity(g, sx, sy, tx, ty) {
-        if (sx == tx && sy == ty) {
-            return true;
-        }
+  add_listening_events() {
+    this.ctx.canvas.focus();
 
-        g[sx][sy] = true;
+    this.ctx.canvas.addEventListener("keydown", (e) => {
+      let d = -1;
+      if (e.key === "w") {
+        d = 0;
+      } else if (e.key === "d") {
+        d = 1;
+      } else if (e.key === "s") {
+        d = 2;
+      } else if (e.key === "a") {
+        d = 3;
+      }
 
-        let dx = [-1, 0, 1, 0], dy = [0, 1, 0, -1];
+      if (d >= 0) {
+        this.store.state.pk.socket.send(
+          JSON.stringify({
+            event: "move",
+            direction: d,
+          })
+        );
+      }
+    });
+  }
 
-        for (let i = 0; i < 4; i++) {
-            let x = sx + dx[i], y = sy + dy[i];
-            if (!g[x][y] && this.checkConnectivity(g, x, y, tx, ty)) {
-                return true;
-            }
-        }
+  update_size() {
+    this.L = parseInt(
+      Math.min(
+        this.parent.clientWidth / this.cols,
+        this.parent.clientHeight / this.rows
+      )
+    );
+    this.ctx.canvas.width = this.L * this.cols;
+    this.ctx.canvas.height = this.L * this.rows;
+  }
 
+  check_valid(cell) {
+    // 检测目标位置是否合法，没有撞到蛇的身体和障碍物
+    for (const wall of this.walls) {
+      if (wall.r === cell.r && wall.c === cell.c) {
         return false;
+      }
     }
 
-    creatWalls() {
-
-        const g = [];
-        for (let r = 0; r < this.rows; r++) {
-            g[r] = [];
-            for (let c = 0; c < this.cols; c++) {
-                g[r][c] = false;
-            }
+    for (const snake of this.snakes) {
+      let k = snake.cells.length;
+      if (!snake.check_tail_increasing()) {
+        k--;
+      }
+      for (let i = 0; i < k; i++) {
+        if (snake.cells[i].r === cell.r && snake.cells[i].c === cell.c) {
+          return false;
         }
-
-        // 四周加上障碍物
-        for (let r = 0; r < this.rows; r++) {
-            g[r][0] = g[r][this.cols - 1] = true;
-        }
-
-        for (let c = 0; c < this.cols; c++) {
-            g[0][c] = g[this.rows - 1][c] = true;
-        }
-
-        // 创建随机障碍物
-        for (let i = 0; i < this.inner_walls_count / 2; i++) {
-            for (let j = 0; j < 1000; j ++) {
-                let r = parseInt(Math.random() * this.rows);
-                let c = parseInt(Math.random() * this.cols);
-
-                if (g[r][c] || g[this.rows - 1 - r][this.cols - 1 - c]) {
-                    continue;
-                }
-
-                if (r == this.rows - 2 && c == 1 || r == 1 && c == this.cols - 2){
-                    continue;
-                }
-
-                g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = true;
-                break;
-            }
-        }
-
-
-        // 判断不连通
-        const copy_g = JSON.parse(JSON.stringify(g));
-        if (!this.checkConnectivity(copy_g, this.rows - 2, 1, 1, this.cols -2))
-            return false;
-
-        // 渲染
-        for (let r = 0; r < this.rows; r++) {
-            for (let c = 0; c < this.cols; c++) {
-                if (g[r][c])
-                    this.walls.push(new Wall(r, c, this));
-            }
-        }
-
-        return true;
+      }
     }
 
-    add_listening_events() {
-        this.ctx.canvas.focus();
+    return true;
+  }
 
-        const [snake0, snake1] = this.snakes;
-
-        this.ctx.canvas.addEventListener("keydown", e => {
-            if (e.key === 'w') {
-                snake0.set_direction(0);
-            }
-            else if (e.key === 'd') {
-                snake0.set_direction(1);
-            }
-            else if (e.key === 's') {
-                snake0.set_direction(2);
-            }
-            else if (e.key === 'a') {
-                snake0.set_direction(3);
-            }
-            else if (e.key === 'i') {
-                snake1.set_direction(0);
-            }
-            else if (e.key === 'l') {
-                snake1.set_direction(1);
-            }
-            else if (e.key === 'k') {
-                snake1.set_direction(2);
-            }
-            else if (e.key === 'j') {
-                snake1.set_direction(3);
-            }
-        });
+  // 判断两蛇是否准好下一回合
+  check_ready() {
+    for (const snake of this.snakes) {
+      if (snake.status !== "idle") {
+        return false;
+      }
+      if (snake.direction === -1) {
+        return false;
+      }
     }
+    return true;
+  }
 
-    start() {
-        for (let i = 0; i < 1000; i++) {
-            if (this.creatWalls()) {
-                break;
-            }
+  // 进入下一回合
+  next_step() {
+    for (const snake of this.snakes) {
+      snake.next_step();
+    }
+  }
+
+  start() {
+    this.creatWalls();
+    this.add_listening_events();
+  }
+
+  update() {
+    this.update_size();
+    if (this.check_ready()) {
+      this.next_step();
+    }
+    this.render();
+  }
+
+  render() {
+    const color_even = "#AAD751";
+    const color_odd = "#A2D048";
+    for (let r = 0; r < this.rows; r++) {
+      for (let c = 0; c < this.cols; c++) {
+        if ((r + c) % 2 == 0) {
+          this.ctx.fillStyle = color_even;
+        } else {
+          this.ctx.fillStyle = color_odd;
         }
-
-        this.add_listening_events();
+        this.ctx.fillRect(c * this.L, r * this.L, this.L, this.L);
+      }
     }
-
-    update_size() {
-        this.L = parseInt(Math.min(this.parent.clientWidth / this.cols, this.parent.clientHeight / this.rows));
-        this.ctx.canvas.width = this.L * this.cols;
-        this.ctx.canvas.height = this.L * this.rows;
-    }
-
-    check_valid(cell) { // 检测目标位置是否合法，没有撞到蛇的身体和障碍物
-        for (const wall of this.walls) {
-            if (wall.r === cell.r && wall.c === cell.c) {
-                return false;
-            }
-        }
-
-        for (const snake of this.snakes) {
-            let k = snake.cells.length;
-            if (!snake.check_tail_increasing()) {
-                k--;
-            }
-            for (let i = 0; i < k; i++) {
-                if (snake.cells[i].r === cell.r && snake.cells[i].c === cell.c) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    // 判断两蛇是否准好下一回合
-    check_ready() {
-        for (const snake of this.snakes) {
-            if (snake.status !== "idle") {
-                return false;
-            }
-            if (snake.direction === -1) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // 进入下一回合
-    next_step() {
-        for (const snake of this.snakes) {
-            snake.next_step();
-        }
-    }
-
-    update() {
-        this.update_size();
-        if (this.check_ready()) {
-            this.next_step();
-        }
-        this.render();
-    }
-
-    render() {
-        const color_even = "#AAD751";
-        const color_odd = "#A2D048";
-        for (let r = 0; r < this.rows; r++) {
-            for (let c = 0; c < this.cols; c++) {
-                if ((r + c) % 2 == 0) {
-                    this.ctx.fillStyle = color_even;
-                }
-                else {
-                    this.ctx.fillStyle = color_odd;
-                }
-                this.ctx.fillRect(c * this.L, r * this.L,this.L,this.L);
-            }
-        }
-
-    }
+  }
 }
