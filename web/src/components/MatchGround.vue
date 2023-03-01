@@ -39,7 +39,7 @@ export default {
             if (match_btn_info.value === "开始匹配") {
                 match_btn_info.value = "取消";
                 store.state.pk.socket.send(JSON.stringify({
-                    event: "start-matching",
+                    event: "start-matching", 
 
                 }));
             }
