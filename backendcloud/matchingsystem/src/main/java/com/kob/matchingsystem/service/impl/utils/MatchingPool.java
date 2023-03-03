@@ -82,6 +82,19 @@ public class MatchingPool extends Thread {
 
     // 判断两名玩家是否匹配
     private boolean checkMatched(Player a, Player b) {
+
+        // 防止前端刷新后匹配到自己
+        if (a.getUserId() == b.getUserId()) {
+            List<Player> newPlayers = new ArrayList<>();
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i).getUserId() == a.getUserId()) {
+                    players.remove(a);
+                    break;
+                }
+            }
+            return false;
+        }
+
         int ratingDelta = Math.abs(a.getRating() - b.getRating());
         int waitingTime = Math.min(a.getWaitingTime(), b.getWaitingTime());
         return ratingDelta <= waitingTime * 10;
