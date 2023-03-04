@@ -12,9 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 public class Player {
     private Integer id;
+    private Integer botId; // -1表示人工操作
+    private String botCode;
     private Integer sx;
     private Integer sy;
-    private List<Integer> steps; // 尾部是头
+    private List<Integer> steps;
 
     private boolean check_tail_increasing(int step) { // 检验当前回合蛇的长度是否增加
         if (step <= 10) return true;

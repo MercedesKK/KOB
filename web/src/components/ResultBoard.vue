@@ -24,6 +24,7 @@
 
 <script>
 import { useStore } from 'vuex';
+import { onUnmounted } from 'vue';
 
 export default {
     setup() {
@@ -36,7 +37,11 @@ export default {
                 opponent_photo: "https://cdn.acwing.com/media/article/image/2022/08/09/1_1db2488f17-anonymous.png",
                 opponent_username: "我的对手",
             });
-        }
+        };
+
+        onUnmounted(() => {
+            store.commit("updateLoser", "none");
+        });
 
         return {
             restart,
