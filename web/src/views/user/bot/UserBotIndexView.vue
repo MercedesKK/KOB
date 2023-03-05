@@ -5,6 +5,7 @@
                 <div class="card" style="margin-top: 20px;">
                     <div class="card-body">
                         <img :src="$store.state.user.photo" alt="" style="width: 100%;">
+
                     </div>
                 </div>
             </div>
@@ -12,6 +13,7 @@
                 <div class="card" style="margin-top: 20px;">
                     <div class="card-header">
                         <span style="font-size: 150%;">我的bot</span>
+
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
                             data-bs-target="#add-bot-btn">创建Bot</button>
