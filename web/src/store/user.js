@@ -58,7 +58,7 @@ export default {
 
     getInfo(context, data) {
       $.ajax({
-        url: "http://localhost:3000/user/account/info/",
+        url: "http://localhost:3000/api/user/account/info/",
         type: "GET",
         headers: {
           Authorization: "Bearer " + context.state.token, // 这里没有.user.，因为就在user的内部使用，直接context和state就行

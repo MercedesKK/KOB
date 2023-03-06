@@ -155,7 +155,7 @@ export default {
 
         const refresh_bots = () => {
             $.ajax({
-                url: "http://localhost:3000/user/bot/getlist/",
+                url: "http://localhost:3000/api/user/bot/getlist/",
                 type: "get",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,
@@ -163,6 +163,7 @@ export default {
                 success(resp) {
                     bots.value = resp;
                 },
+
             });
         };
 
@@ -171,7 +172,7 @@ export default {
         const add_bot = () => {
             botadd.error_message = "";
             $.ajax({
-                url: "http://localhost:3000/user/bot/add/",
+                url: "http://localhost:3000/api/user/bot/add/",
                 type: "POST",
                 data: {
                     title: botadd.title,
@@ -225,7 +226,7 @@ export default {
 
         const remove_bot = (bot) => {
             $.ajax({
-                url: "http://localhost:3000/user/bot/remove/",
+                url: "http://localhost:3000/api/user/bot/remove/",
                 type: "POST",
                 data: {
                     bot_id: bot.id,
