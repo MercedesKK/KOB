@@ -33,7 +33,7 @@ export default {
     // 传入data的目的是传入前端输入的账号密码，以及前端成功时候的函数在这里调用
     login(context, data) {
       $.ajax({
-        url: "https://app4931.acapp.acwing.com.cn/api/user/account/token/",
+        url: "http://localhost:3000/api/user/account/token/",
         type: "POST",
         data: {
           username: data.username,
@@ -58,7 +58,7 @@ export default {
 
     getInfo(context, data) {
       $.ajax({
-        url: "https://app4931.acapp.acwing.com.cn/api/user/account/info/",
+        url: "http://localhost:3000/api/user/account/info/",
         type: "GET",
         headers: {
           Authorization: "Bearer " + context.state.token, // 这里没有.user.，因为就在user的内部使用，直接context和state就行

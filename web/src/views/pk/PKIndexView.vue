@@ -27,7 +27,7 @@ export default {
 
         let socket = null;
 
-        const socketUrl = `wss://app4931.acapp.acwing.com.cn/websocket/${store.state.user.token}`;
+        const socketUrl = `ws://localhost:3000/websocket/${store.state.user.token}`;
         onMounted(() => {
             store.commit("updateOpponent", {
                 opponent_photo: "https://cdn.acwing.com/media/article/image/2022/08/09/1_1db2488f17-anonymous.png",
