@@ -13,11 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bot {
-
-    // 主键要加的注解 主键自增
     @TableId(type = IdType.AUTO)
     private Integer id;
-    // 数据库有下划线的地方这里就换成驼峰；数据库，前端的数据都用正常的
     private Integer userId;
     private String title;
     private String description;

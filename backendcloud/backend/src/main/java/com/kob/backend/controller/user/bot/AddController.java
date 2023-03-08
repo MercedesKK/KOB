@@ -13,7 +13,6 @@ public class AddController {
     @Autowired
     private AddService addService;
 
-    // 修改数据库用post
     @PostMapping("/api/user/bot/add/")
     public Map<String, String> add(@RequestParam Map<String, String> data) {
         return addService.add(data);

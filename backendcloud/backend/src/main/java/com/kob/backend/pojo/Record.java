@@ -13,14 +13,13 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Record {
-    // 主键要加的注解 主键自增
     @TableId(type = IdType.AUTO)
     private Integer id;
     private Integer aId;
-    private Integer aSx; // 数据库用下划线这里一定用驼峰！！！！！
+    private Integer aSx;
     private Integer aSy;
     private Integer bId;
-    private Integer bSx; // 数据库用下划线这里一定用驼峰！！！！！
+    private Integer bSx;
     private Integer bSy;
     private String aSteps;
     private String bSteps;

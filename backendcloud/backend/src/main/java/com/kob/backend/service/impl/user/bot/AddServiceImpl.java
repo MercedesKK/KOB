@@ -17,15 +17,15 @@ import java.util.Map;
 
 @Service
 public class AddServiceImpl implements AddService {
+
     @Autowired
     private BotMapper botMapper;
 
     @Override
     public Map<String, String> add(Map<String, String> data) {
-        UsernamePasswordAuthenticationToken authentication =
+        UsernamePasswordAuthenticationToken authenticationToken =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = loginUser.getUser();
 
         String title = data.get("title");
@@ -45,11 +45,11 @@ public class AddServiceImpl implements AddService {
         }
 
         if (description == null || description.length() == 0) {
-            description = "这个用户什么都没留下";
+            description = "这个用户很懒，什么也没留下~";
         }
 
         if (description.length() > 300) {
-            map.put("error_message", "Bot的描述不能大于300");
+            map.put("error_message", "Bot描述的长度不能大于300");
             return map;
         }
 
@@ -65,8 +65,8 @@ public class AddServiceImpl implements AddService {
 
         QueryWrapper<Bot> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", user.getId());
-        if (botMapper.selectCount(queryWrapper) > 4) {
-            map.put("error_message", "玩家创建的bot数量不能超过5个");
+        if (botMapper.selectCount(queryWrapper) >= 10) {
+            map.put("error_message", "每个用户最多只能创建10个Bot！");
             return map;
         }
 

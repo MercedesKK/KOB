@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReceiveBotMoveServiceImpl implements ReceiveBotMoveService {
     @Override
-    public String receiveMove(Integer userId, Integer direction) {
-        System.out.println("receive bot move" + userId + " " + direction);
-
+    public String receiveBotMove(Integer userId, Integer direction) {
+        System.out.println("receive bot move: " + userId + " " + direction + " ");
         if (WebSocketServer.users.get(userId) != null) {
             Game game = WebSocketServer.users.get(userId).game;
             if (game != null) {
@@ -22,6 +21,6 @@ public class ReceiveBotMoveServiceImpl implements ReceiveBotMoveService {
             }
         }
 
-        return "receive success";
+        return "receive bot move success";
     }
 }

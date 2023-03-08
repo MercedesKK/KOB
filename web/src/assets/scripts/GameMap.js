@@ -59,10 +59,10 @@ export class GameMap extends GameObject {
       const loser = this.store.state.record.record_loser;
       const interval_id = setInterval(() => {
         if (k >= a_steps.length - 1) {
-          if (loser === "All" || loser === "A") {
+          if (loser === "all" || loser === "A") {
             snake0.status = "die";
           }
-          if (loser === "All" || loser === "B") {
+          if (loser === "all" || loser === "B") {
             snake1.status = "die";
           }
           clearInterval(interval_id);
@@ -88,12 +88,20 @@ export class GameMap extends GameObject {
         }
 
         if (d >= 0) {
-          this.store.state.pk.socket.send(
-            JSON.stringify({
-              event: "move",
-              direction: d,
-            })
-          );
+          setTimeout(() => {
+            this.store.state.pk.socket.send(
+              JSON.stringify({
+                event: "move",
+                direction: d,
+              })
+            );
+          }, 100);
+          // this.store.state.pk.socket.send(
+          //   JSON.stringify({
+          //     event: "move",
+          //     direction: d,
+          //   })
+          // );
         }
       });
     }

@@ -5,11 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Player {
     private Integer userId;
     private Integer rating;
     private Integer botId;
-    private Integer waitingTime;
+    private Integer waitingTime;  // 等待时间
 }

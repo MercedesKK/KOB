@@ -115,7 +115,7 @@ router.beforeEach((to, from, next) => {
       // next();
       setTimeout(() => {
         next();
-      }, 1);
+      }, 100);
     } else {
       next({ name: "user_account_login" });
     }

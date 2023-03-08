@@ -17,7 +17,6 @@ public class GetRanklistServiceImpl implements GetRanklistService {
     @Autowired
     private UserMapper userMapper;
 
-
     @Override
     public JSONObject getList(Integer page) {
         IPage<User> userIPage = new Page<>(page, 10);
@@ -25,14 +24,10 @@ public class GetRanklistServiceImpl implements GetRanklistService {
         queryWrapper.orderByDesc("rating");
         List<User> users = userMapper.selectPage(userIPage, queryWrapper).getRecords();
         JSONObject resp = new JSONObject();
-
-        for (User user : users) {
+        for (User user: users)
             user.setPassword("");
-        }
-
         resp.put("users", users);
         resp.put("users_count", userMapper.selectCount(null));
-
         return resp;
     }
 }

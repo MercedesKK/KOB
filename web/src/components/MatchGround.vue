@@ -52,17 +52,25 @@ export default {
         const click_match_btn = () => {
             if (match_btn_info.value === "开始匹配") {
                 match_btn_info.value = "取消";
-                store.state.pk.socket.send(JSON.stringify({
-                    event: "start-matching",
-                    bot_id: select_bot.value,
-                }));
+                setTimeout(() => {
+                    store.state.pk.socket.send(JSON.stringify({
+                        event: "start-matching",
+                        bot_id: select_bot.value,
+                    }));
+                }, 100);
+                // store.state.pk.socket.send(JSON.stringify({
+                //     event: "start-matching",
+                //     bot_id: select_bot.value,
+                // }));
             }
             else {
                 match_btn_info.value = "开始匹配";
-                store.state.pk.socket.send(JSON.stringify({
-                    event: "stop-matching",
+                setTimeout(() => {
+                    store.state.pk.socket.send(JSON.stringify({
+                        event: "stop-matching",
+                    }));
+                }, 100);
 
-                }));
             }
         };
 

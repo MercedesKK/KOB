@@ -68,10 +68,10 @@ export default {
 
                     const [snake0, snake1] = game.snakes;
 
-                    if (data.loser === "All" || data.loser === "A") {
+                    if (data.loser === "all" || data.loser === "A") {
                         snake0.status = "die";
                     }
-                    if (data.loser === "All" || data.loser === "B") {
+                    if (data.loser === "all" || data.loser === "B") {
                         snake1.status = "die";
                     }
                     store.commit("updateLoser", data.loser);

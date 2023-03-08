@@ -21,13 +21,13 @@ public class UpdateServiceImpl implements UpdateService {
 
     @Override
     public Map<String, String> update(Map<String, String> data) {
-        UsernamePasswordAuthenticationToken authentication =
+        UsernamePasswordAuthenticationToken authenticationToken =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = loginUser.getUser();
 
         int bot_id = Integer.parseInt(data.get("bot_id"));
+
         String title = data.get("title");
         String description = data.get("description");
         String content = data.get("content");
@@ -45,11 +45,11 @@ public class UpdateServiceImpl implements UpdateService {
         }
 
         if (description == null || description.length() == 0) {
-            description = "这个用户什么都没留下";
+            description = "这个用户很懒，什么也没留下~";
         }
 
         if (description.length() > 300) {
-            map.put("error_message", "Bot的描述不能大于300");
+            map.put("error_message", "Bot描述的长度不能大于300");
             return map;
         }
 
@@ -71,7 +71,7 @@ public class UpdateServiceImpl implements UpdateService {
         }
 
         if (!bot.getUserId().equals(user.getId())) {
-            map.put("error_message", "没有权限删除");
+            map.put("error_message", "没有权限修改该Bot");
             return map;
         }
 
