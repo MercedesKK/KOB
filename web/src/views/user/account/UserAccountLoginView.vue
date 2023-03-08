@@ -19,42 +19,38 @@
     </ContentField>
 </template>
 
-<!-- 
-    上面使用变量不需要value，下面使用和修改都要用value
-    切换页面使用router，不是route
- -->
-
 <script>
-import ContentField from '../../../components/ContentField.vue';
-import { useStore } from 'vuex';
-import { ref } from 'vue';
-import router from '@/router';
+import ContentField from '../../../components/ContentField.vue'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+import router from '../../../router/index'
 
 export default {
     components: {
-        ContentField,
+        ContentField
     },
     setup() {
         const store = useStore();
-        let username = ref("");
-        let password = ref("");
-        let error_message = ref("");
+        let username = ref('');
+        let password = ref('');
+        let error_message = ref('');
 
         // const jwt_token = localStorage.getItem("jwt_token");
         // if (jwt_token) {
-
         //     store.commit("updateToken", jwt_token);
-        //     store.dispatch("getInfo", {
+        //     store.dispatch("getinfo", {
         //         success() {
         //             router.push({ name: "home" });
+        //             store.commit("updatePullingInfo", false);
         //         },
         //         error() {
-
+        //             store.commit("updatePullingInfo", false);
         //         }
         //     })
+        // } else {
+        //     store.commit("updatePullingInfo", false);
         // }
 
-        // 前端按钮绑定的函数
         const login = () => {
             error_message.value = "";
             store.dispatch("login", {
@@ -63,16 +59,16 @@ export default {
                 success() {
                     store.dispatch("getInfo", {
                         success() {
+                            console.log(1123);
                             router.push({ name: 'home' });
-                        },
+                        }
                     })
                 },
                 error() {
                     error_message.value = "用户名或密码错误";
                 }
-            });
-
-        };
+            })
+        }
 
         return {
             username,

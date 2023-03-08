@@ -1,30 +1,29 @@
 import { createRouter, createWebHistory } from "vue-router";
-import PKIndexView from "../views/pk/PKIndexView";
+import PkIndexView from "../views/pk/PkIndexView";
 import RecordIndexView from "../views/record/RecordIndexView";
 import RecordContentView from "../views/record/RecordContentView";
-import NotFound from "../views/error/NotFound";
+import RanklistIndexView from "../views/ranklist/RanklistIndexView";
 import UserBotIndexView from "../views/user/bot/UserBotIndexView";
-import RankListIndexView from "../views/ranklist/RankListIndexView";
+import NotFound from "../views/error/NotFound";
 import UserAccountLoginView from "../views/user/account/UserAccountLoginView";
 import UserAccountRegisterView from "../views/user/account/UserAccountRegisterView";
-import store from "@/store"; // 判断当前是不是登录状态
+import store from "../store/index";
 
-// 当输入下列地址时就展现出对应的View组件
 const routes = [
   {
     path: "/",
     name: "home",
     redirect: "/pk/",
     meta: {
-      requsetAuth: true,
+      requestAuth: true,
     },
   },
   {
     path: "/pk/",
     name: "pk_index",
-    component: PKIndexView,
+    component: PkIndexView,
     meta: {
-      requsetAuth: true,
+      requestAuth: true,
     },
   },
   {
@@ -32,7 +31,7 @@ const routes = [
     name: "record_index",
     component: RecordIndexView,
     meta: {
-      requsetAuth: true,
+      requestAuth: true,
     },
   },
   {
@@ -40,31 +39,15 @@ const routes = [
     name: "record_content",
     component: RecordContentView,
     meta: {
-      requsetAuth: true,
+      requestAuth: true,
     },
   },
   {
     path: "/ranklist/",
     name: "ranklist_index",
-    component: RankListIndexView,
+    component: RanklistIndexView,
     meta: {
-      requsetAuth: true,
-    },
-  },
-  {
-    path: "/user/account/login/",
-    name: "user_account_login",
-    component: UserAccountLoginView,
-    meta: {
-      requsetAuth: false,
-    },
-  },
-  {
-    path: "/user/account/register/",
-    name: "user_account_register",
-    component: UserAccountRegisterView,
-    meta: {
-      requsetAuth: false,
+      requestAuth: true,
     },
   },
   {
@@ -72,15 +55,31 @@ const routes = [
     name: "user_bot_index",
     component: UserBotIndexView,
     meta: {
-      requsetAuth: true,
+      requestAuth: true,
+    },
+  },
+  {
+    path: "/user/account/login/",
+    name: "user_account_login",
+    component: UserAccountLoginView,
+    meta: {
+      requestAuth: false,
+    },
+  },
+  {
+    path: "/user/account/register/",
+    name: "user_account_register",
+    component: UserAccountRegisterView,
+    meta: {
+      requestAuth: false,
     },
   },
   {
     path: "/404/",
-    name: "404_index",
+    name: "404",
     component: NotFound,
     meta: {
-      requsetAuth: false,
+      requestAuth: false,
     },
   },
   {
@@ -93,6 +92,14 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requestAuth && !store.state.user.is_login) {
+//     next({name: "user_account_login"});
+//   } else {
+//     next();
+//   }
+// })
 
 // 每次路由跳转前执行
 router.beforeEach((to, from, next) => {

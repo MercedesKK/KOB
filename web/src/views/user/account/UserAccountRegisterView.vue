@@ -24,31 +24,26 @@
     </ContentField>
 </template>
 
-<!-- 
-    上面使用变量不需要value，下面使用和修改都要用value
-    切换页面使用router，不是route
- -->
-
 <script>
-import ContentField from '../../../components/ContentField.vue';
-import { ref } from 'vue';
-import $ from 'jquery';
-import router from '@/router';
+import ContentField from '../../../components/ContentField.vue'
+import { ref } from 'vue'
+import router from '../../../router/index'
+import $ from 'jquery'
 
 export default {
     components: {
-        ContentField,
+        ContentField
     },
     setup() {
-        let username = ref("");
-        let password = ref("");
-        let confirmedPassword = ref("");
-        let error_message = ref("");
+        let username = ref('');
+        let password = ref('');
+        let confirmedPassword = ref('');
+        let error_message = ref('');
 
         const register = () => {
             $.ajax({
-                url: "http://localhost:3000/api/user/account/register/",
-                type: "POST",
+                url: "https://app4931.acapp.acwing.com.cn/api/user/account/register/",
+                type: "post",
                 data: {
                     username: username.value,
                     password: password.value,
@@ -56,15 +51,12 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_message === "success") {
-
                         router.push({ name: "user_account_login" });
-                    }
-                    else {
+                    } else {
                         error_message.value = resp.error_message;
                     }
                 },
-
-            })
+            });
         }
 
         return {

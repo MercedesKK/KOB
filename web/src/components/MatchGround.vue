@@ -12,11 +12,10 @@
             <div class="col-4">
                 <div class="user-select-bot">
                     <select v-model="select_bot" class="form-select" aria-label="Default select example">
-                        <option value="-1" selected>亲自上阵</option>
+                        <option value="-1" selected>亲自出马</option>
                         <option v-for="bot in bots" :key="bot.id" :value="bot.id">
                             {{ bot.title }}
                         </option>
-
                     </select>
                 </div>
             </div>
@@ -36,13 +35,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { useStore } from 'vuex';
 import $ from 'jquery';
 
 export default {
-    components: {
-    },
     setup() {
         const store = useStore();
         let match_btn_info = ref("开始匹配");
@@ -52,62 +49,49 @@ export default {
         const click_match_btn = () => {
             if (match_btn_info.value === "开始匹配") {
                 match_btn_info.value = "取消";
-                setTimeout(() => {
-                    store.state.pk.socket.send(JSON.stringify({
-                        event: "start-matching",
-                        bot_id: select_bot.value,
-                    }));
-                }, 100);
-                // store.state.pk.socket.send(JSON.stringify({
-                //     event: "start-matching",
-                //     bot_id: select_bot.value,
-                // }));
-            }
-            else {
+                store.state.pk.socket.send(JSON.stringify({
+                    event: "start-matching",
+                    bot_id: select_bot.value,
+                }));
+            } else {
                 match_btn_info.value = "开始匹配";
-                setTimeout(() => {
-                    store.state.pk.socket.send(JSON.stringify({
-                        event: "stop-matching",
-                    }));
-                }, 100);
-
+                store.state.pk.socket.send(JSON.stringify({
+                    event: "stop-matching",
+                }));
             }
-        };
+        }
 
         const refresh_bots = () => {
             $.ajax({
-                url: "http://localhost:3000/api/user/bot/getlist/",
+                url: "https://app4931.acapp.acwing.com.cn/api/user/bot/getlist/",
                 type: "get",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,
                 },
                 success(resp) {
                     bots.value = resp;
-                },
-            });
-        };
+                }
+            })
+        }
 
-        refresh_bots();
+        refresh_bots();  // 从云端动态获取bots
 
         return {
             match_btn_info,
             click_match_btn,
-            refresh_bots,
             bots,
             select_bot,
         }
     }
 }
-
 </script>
 
 <style scoped>
 div.matchground {
     width: 60vw;
     height: 70vh;
-    background-color: rgba(50, 50, 50, 0.5);
     margin: 40px auto;
-
+    background-color: rgba(50, 50, 50, 0.5);
 }
 
 div.user-photo {
