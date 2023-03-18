@@ -7,15 +7,24 @@ import UserBotIndexView from "../views/user/bot/UserBotIndexView";
 import NotFound from "../views/error/NotFound";
 import UserAccountLoginView from "../views/user/account/UserAccountLoginView";
 import UserAccountRegisterView from "../views/user/account/UserAccountRegisterView";
+import ForumIndexView from "../views/forum/ForumIndexView";
 import store from "../store/index";
 
 const routes = [
   {
     path: "/",
     name: "home",
-    redirect: "/pk/",
+    // redirect: "/pk/",
     meta: {
-      requestAuth: true,
+      requestAuth: false,
+    },
+  },
+  {
+    path: "/forum/",
+    name: "forum_index",
+    component: ForumIndexView,
+    meta: {
+      requestAuth: false,
     },
   },
   {
@@ -117,7 +126,7 @@ router.beforeEach((to, from, next) => {
     flag = 2;
   }
 
-  if (to.meta.requsetAuth && !store.state.user.is_login) {
+  if (to.meta.requestAuth && !store.state.user.is_login) {
     if (flag === 1) {
       // next();
       setTimeout(() => {
